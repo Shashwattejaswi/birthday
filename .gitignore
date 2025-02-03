@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /db.json
+/public
 /.pnp
 .pnp.*
 .yarn/*
