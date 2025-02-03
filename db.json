@@ -1,5 +1,16 @@
 {
   "birthday": [
- 
+    {
+      "id": "e7c0",
+      "name": "Shashwat",
+      "age": "2025-02-11",
+      "url": "/Default.jpg"
+    },
+    {
+      "id": "79df",
+      "name": "krishna",
+      "age": "2025-02-23",
+      "url": "/4e3894f4f6407322b36c25f2e3599801.png"
+    }
   ]
 }
