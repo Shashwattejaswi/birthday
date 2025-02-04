@@ -44,11 +44,13 @@ export const postData=async(obj:allData)=>{
     }
 }
 
-export const getData=async()=>{
+export const getData=async(page:any)=>{
 
     try{
-        const res=await fetch("http://localhost:4001/birthday",{method:"GET",headers:{'content-type':'application/json'}})
+        console.log(page+"ok");
+        const res=await fetch(`http://localhost:4001/birthday?_page=${page}&_per_page=5`,{method:"GET",headers:{'content-type':'application/json'}})
         const jsonData=await res.json();
+        console.log(jsonData);
         return jsonData;
     }
     catch(error)

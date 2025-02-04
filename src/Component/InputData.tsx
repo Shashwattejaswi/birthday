@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { FormEvent, MouseEvent, useState } from "react";
+import { FormEvent, MouseEvent, useEffect, useState } from "react";
 import { updatePublic,postData,getData,deleteByID } from "@/app/actionHandle";
 
 
@@ -14,7 +14,9 @@ const InputData = () => {
   const [preImg, setPreImg] = useState<File | null>(null);
   const [imgPreview, setImgPreview] = useState<string | null>(null);
 
-  const [allData,setAllData]=useState<any>(null);
+  const [allData,setAllData]=useState<any>([]);
+  const [page,setPage]=useState({pageNo:0,next:0});
+  
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setImgData((prevImgData) => ({
       ...prevImgData,
@@ -45,11 +47,15 @@ const InputData = () => {
       const fileData=await updatePublic(formData);
 
       const response=await postData({...imgData,url:fileData.url})
+      // if(response)
+      //   {
+      //     const all=await getData();
+      //     setAllData(all);
+          
+      //   }
       if(response)
       {
-        const all=await getData();
-        setAllData(all);
-        
+        confirm("done");
       }
       
     }
@@ -72,6 +78,31 @@ const InputData = () => {
       
       
   }
+  var remainingPage:number | null =1;
+  useEffect(()=>{
+    if(page.pageNo===0)
+      return;
+      const okk=async()=>{
+        
+         const fiveData=await getData(page.pageNo);
+         setAllData((pre:any)=>[...pre,...fiveData.data]);
+         setPage((pre)=>({...pre,next:fiveData.next}));
+       }
+       okk();
+  },[page.pageNo])
+  const get5Data=async(e:any)=>{
+
+    let element=e.target;
+    if(element.scrollHeight-element.scrollTop<=5+element.clientHeight && page.next!=null)
+    {
+      console.log(remainingPage)
+      setPage((pre)=>({...pre,pageNo:pre.pageNo+1}));
+
+    }
+
+    
+  }
+
   return (
     <>
     <form onSubmit={(e)=>{handleSubmit(e)}} className="p-2 bg-white shadow-md rounded-md flex w-1/2 flex-wrap justify-around gap-3 ">
@@ -111,7 +142,8 @@ const InputData = () => {
           Browse
         </label>
     </form>
-    <div className="flex flex-col gap-4 p-4 max-h-96 overflow-y-auto mt-4">
+    <button  className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 w-1/4 self-center" onClick={()=>{setPage((pre)=>({...pre,pageNo:pre.pageNo+1}))}}>get Data</button>
+    <div className="flex flex-col gap-4 p-4 max-h-96 overflow-y-auto mt-4" onScroll={(e)=>{get5Data(e)}}>
       {
         allData?allData.map((a:any ,key:any)=>
         <div key={key} className="flex p-2 gap-6 rounded-l-full rounded-r-xl bg-gray-200 items-center">
